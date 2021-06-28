@@ -1,3 +1,5 @@
+// eslint-disable-next-line
+import pg from 'pg';
 import Sequelize, { DataTypes } from 'sequelize';
 import _lists from './lists';
 import _notes from './notes';
@@ -40,7 +42,7 @@ export function getDB() {
     };
     sequelize = new Sequelize(config.uri, config.options);
   }
-  console.log('connected to database');
+  console.log('connected to database', sequelize);
   const lists = _lists(sequelize, DataTypes);
   const notes = _notes(sequelize, DataTypes);
   const users = _users(sequelize, DataTypes);

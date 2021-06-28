@@ -10,37 +10,36 @@ Resources:
       Port: ${env:DB_PORT}
       DBSubnetGroupName:
         Ref: ServerlessSubnetGroup
-      Engine: aurora
-      EngineVersion: "5.6"
+      Engine: aurora-postgresql
+      EngineVersion: "10.7"
       EngineMode: serverless
       ScalingConfiguration:
         AutoPause: true
         MaxCapacity: 4
-        MinCapacity: 1
+        MinCapacity: 2
         SecondsUntilAutoPause: 300
       DatabaseName: ${self:custom.AURORA.DB_NAME}
       BackupRetentionPeriod: 3
-      DBClusterParameterGroupName:
-        Ref: RDSClusterParameter
+      DBClusterParameterGroupName: "default.aurora-postgresql10"
       VpcSecurityGroupIds:
         - !Ref "ServerlessSecurityGroup"
-  RDSClusterParameter:
-    Type: AWS::RDS::DBClusterParameterGroup
-    Properties:
-      Description: Parameter group for the Serverless Aurora RDS DB.
-      Family: aurora5.6
-      Parameters:
-        character_set_database: "utf32"
-  RDSDBParameterGroup:
-    Type: AWS::RDS::DBParameterGroup
-    Properties:
-      Description: Parameter group for the Serverless Aurora RDS DB.
-      Family: aurora5.6
-      Parameters:
-        sql_mode: IGNORE_SPACE
-        max_connections: 100
-        wait_timeout: 900
-        interactive_timeout: 900
+  # RDSClusterParameter:
+  #   Type: AWS::RDS::DBClusterParameterGroup
+  #   Properties:
+  #     Description: Parameter group for the Serverless Aurora RDS DB.
+  #     Family: aurora-postgresql9.6
+  #     Parameters:
+  #       character_set_database: "UTF8"
+  # RDSDBParameterGroup:
+  #   Type: AWS::RDS::DBParameterGroup
+  #   Properties:
+  #     Description: Parameter group for the Serverless Aurora RDS DB.
+  #     Family: aurora-postgresql9.6
+  #     Parameters:
+  #       sql_mode: IGNORE_SPACE
+  #       max_connections: 100
+  #       wait_timeout: 900
+  #       interactive_timeout: 900
 Outputs:
   RDSHost:
     Description: Host of the AppSync-RDS-todo RDS instance

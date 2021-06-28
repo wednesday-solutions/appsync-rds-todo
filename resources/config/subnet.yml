@@ -58,7 +58,7 @@ Resources:
       VpcId:
         Ref: ServerlessVPC
       AvailabilityZone: ${self:provider.region}a
-      CidrBlock: ${self:custom.AURORA.VPC_CIDR}.0.0.0/24
+      CidrBlock: ${self:custom.AURORA.VPC_CIDR}.0.3.0/24
   ServerlessPrivateSubnetB:
     DependsOn: ServerlessVPC
     Type: AWS::EC2::Subnet
@@ -66,7 +66,7 @@ Resources:
       VpcId:
         Ref: ServerlessVPC
       AvailabilityZone: ${self:provider.region}b
-      CidrBlock: ${self:custom.AURORA.VPC_CIDR}.0.1.0/24
+      CidrBlock: ${self:custom.AURORA.VPC_CIDR}.0.4.0/24
   ServerlessPrivateSubnetC:
     DependsOn: ServerlessVPC
     Type: AWS::EC2::Subnet
@@ -74,7 +74,7 @@ Resources:
       VpcId:
         Ref: ServerlessVPC
       AvailabilityZone: ${self:provider.region}c
-      CidrBlock: ${self:custom.AURORA.VPC_CIDR}.2.0.0/24
+      CidrBlock: ${self:custom.AURORA.VPC_CIDR}.0.5.0/24
   DefaultPrivateRouteTable:
     Type: AWS::EC2::RouteTable
     Properties:
@@ -101,7 +101,7 @@ Resources:
       SubnetId:
         Ref: ServerlessSubnetA
       RouteTableId:
-        Ref: DefaultPublicRouteTable
+        Ref: RouteTablePublic
   SubnetRouteTableAssociationLambdaPrivateB:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
@@ -115,7 +115,7 @@ Resources:
       SubnetId:
         Ref: ServerlessSubnetB
       RouteTableId:
-        Ref: DefaultPublicRouteTable
+        Ref: RouteTablePublic
   SubnetRouteTableAssociationLambdaPrivateC:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
@@ -129,7 +129,7 @@ Resources:
       SubnetId:
         Ref: ServerlessSubnetC
       RouteTableId:
-        Ref: DefaultPublicRouteTable
+        Ref: RouteTablePublic
 
 Outputs:
   ServerlessSubnetAId:
