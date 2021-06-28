@@ -1,0 +1,17 @@
+- type: Query
+  field: notes
+  request: "queries/getNote.req.vtl"
+  response: "response.vtl"
+  dataSource: Lambda_notes
+
+- type: Query
+  field: lists
+  request: "queries/getNote.req.vtl"
+  response: "response.vtl"
+  dataSource: Lambda_lists
+
+- type: Query
+  field: users
+  request: "queries/getNote.req.vtl"
+  response: "response.vtl"
+  dataSource: Lambda_users

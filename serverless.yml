@@ -1,0 +1,90 @@
+service:
+  name: ${env:NAME}
+plugins:
+  - serverless-webpack
+  - serverless-sequelize-migrations
+  - serverless-appsync-plugin
+  - serverless-plugin-split-stacks
+  - serverless-dotenv-plugin
+  - serverless-appsync-simulator
+  - serverless-offline
+  - serverless-plugin-scripts
+
+provider:
+  name: aws
+  timeout: 90
+  runtime: nodejs12.x
+  stage: ${env:STAGE}
+  region: ${env:REGION}
+  awsRegion: ${env:REGION}
+  versionFunctions: false
+  environment:
+    DB_DIALECT: ${file(./set-db-environment.js):env.DB_DIALECT}
+    DB_NAME: ${file(./set-db-environment.js):env.DB_NAME}
+    DB_HOST: ${file(./set-db-environment.js):env.DB_HOST}
+    DB_USERNAME: ${file(./set-db-environment.js):env.DB_USERNAME}
+    DB_PASSWORD: ${file(./set-db-environment.js):env.DB_PASSWORD}
+    DB_PORT: ${file(./set-db-environment.js):env.DB_PORT}
+resources:
+  - ${file(./resources/config/roles.yml)}
+  - ${file(./resources/config/vpc.yml)}
+  - ${file(./resources/config/subnet.yml)}
+  - ${file(./resources/config/internet-gateway.yml)}
+  - ${file(./resources/config/route-public.yml)}
+  - ${file(./resources/config/security-groups.yml)}
+  - ${file(./resources/rds/resources.yml)}
+  - ${file(./resources/lambdas/resources.yml)}
+
+functions: ${file(./resources/lambdas/functions.yml)}
+custom:
+  scripts:
+    hooks:
+      'aws:deploy:finalize:cleanup': ${file(./post-deployment-exec.js)}
+  appsync-simulator:
+    location: ".webpack/service"
+    buildPrefix: .webpack/service
+    rds:
+      dbName: ${file(./set-db-environment.js):env.DB_NAME}
+      dbHost: ${file(./set-db-environment.js):env.DB_HOST}
+      dbDialect: ${file(./set-db-environment.js):env.DB_DIALECT}
+      dbUsername: ${file(./set-db-environment.js):env.DB_USERNAME}
+      dbPassword: ${file(./set-db-environment.js):env.DB_PASSWORD}
+      dbPort: ${file(./set-db-environment.js):env.DB_PORT}
+  userPoolName: ${self:service.name}-${env:STAGE}-user-pool
+  webpack:
+    includeModules: true
+    excludeFiles: ./**/*.test.js
+  dynamodb:
+    stages:
+      - develop
+  AURORA:
+    VPC_CIDR: 10
+    DB_NAME: ${env:RDS_PREFIX}_${env:STAGE}
+  dependsOn:
+    chains: 30
+  accountId: ${env:ACCOUNT_ID}
+  region: ${env:REGION}
+  appsync-offline:
+    port: 62222
+  splitStacks:
+    perFunction: true
+    perType: true
+    perGroupFunction: false
+    nestedStackCount: 200
+    stackConcurrency: 40
+    resourceConcurrency: 80
+  appSync:
+    name: ${env:NAME}-${env:STAGE}
+    schema: schema.graphql
+    logConfig:
+      level: ALL
+      excludeVerboseContent: false
+    serviceRole: AuthenticatedAppSyncServiceRole
+    authenticationType: API_KEY
+    mappingTemplatesLocation: resolvers/
+    mappingTemplates:
+      - ${file(./resources/mapping-templates/queries.yml)}
+      - ${file(./resources/mapping-templates/mutations.yml)}
+    dataSources:
+      - ${file(./resources/lambdas/datasources.yml)}
+      - ${file(./resources/rds/datasources.yml)}

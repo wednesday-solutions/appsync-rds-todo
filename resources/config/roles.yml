@@ -1,0 +1,13 @@
+Resources:
+
+  lambdaInvokePolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Managed policy to provide access to invoke lambda
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: 'Allow'
+            Action:
+              - 'lambda:InvokeFunction'
+            Resource: 'arn:aws:lambda:${env:REGION}:${env:ACCOUNT_ID}:function:*'

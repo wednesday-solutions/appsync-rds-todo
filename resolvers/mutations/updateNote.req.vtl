@@ -1,0 +1,21 @@
+#set( $update = "" )
+#set( $equals = "=" )
+#foreach( $entry in $ctx.args.input.keySet() )
+   #set( $cur = $ctx.args.input[$entry] )
+   #if( $util.isBoolean($cur) )
+       #if( $cur )
+         #set ( $cur = "1" )
+       #else
+         #set ( $cur = "0" )
+       #end
+   #end
+   #if ( $util.isNullOrEmpty($update) )
+      #set($update = "$entry$equals'$cur'" )
+   #else
+      #set($update = "$update,$entry$equals'$cur'" )
+   #end
+#end
+{
+  "version": "2018-05-29",
+  "statements":   ["UPDATE notes SET $update WHERE id=$ctx.args.input.id", "SELECT * FROM notes WHERE id=$ctx.args.input.id"]
+}
