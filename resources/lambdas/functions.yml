@@ -4,6 +4,13 @@ notes:
 users:
   handler: functions/queries/Users/index.handler
   role: LambdaServiceRole
+  vpc:
+    securityGroupIds:
+      - !Ref ServerlessSecurityGroup
+    subnetIds:
+      - !Ref ServerlessSubnetA
+      - !Ref ServerlessSubnetB
+      - !Ref ServerlessSubnetC
 lists:
   handler: functions/queries/Lists/index.handler
   role: LambdaServiceRole

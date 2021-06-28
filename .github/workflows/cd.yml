@@ -1,4 +1,4 @@
-name: appsync-rds-todo CD
+name: appsync-rds-todo CD develop
 on:
   push:
     branches:
@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: 12.x
       - name: install dependencies
-        run: yarn
+        run: npm i
       - name: Get branch name
         id: vars
         run: echo ::set-output name=stage::${GITHUB_REF#refs/*/}

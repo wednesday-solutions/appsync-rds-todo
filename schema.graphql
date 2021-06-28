@@ -90,7 +90,7 @@ type PaginatedNotes {
 type Query {
   notes(pagination: PaginationInput!, where: AWSJSON): PaginatedNotes!
   lists(pagination: PaginationInput!, where: AWSJSON): PaginatedLists!
-  user(pagination: PaginationInput!, where: AWSJSON): PaginatedUsers!
+  users(pagination: PaginationInput!, where: AWSJSON): PaginatedUsers!
 }
 type Mutation {
   # create mutations

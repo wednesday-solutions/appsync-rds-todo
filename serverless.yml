@@ -4,7 +4,6 @@ plugins:
   - serverless-webpack
   - serverless-sequelize-migrations
   - serverless-appsync-plugin
-  - serverless-plugin-split-stacks
   - serverless-dotenv-plugin
   - serverless-appsync-simulator
   - serverless-offline
@@ -66,13 +65,6 @@ custom:
   region: ${env:REGION}
   appsync-offline:
     port: 62222
-  splitStacks:
-    perFunction: true
-    perType: true
-    perGroupFunction: false
-    nestedStackCount: 200
-    stackConcurrency: 40
-    resourceConcurrency: 80
   appSync:
     name: ${env:NAME}-${env:STAGE}
     schema: schema.graphql

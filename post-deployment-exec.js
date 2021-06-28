@@ -2,6 +2,7 @@ async function migrate(serverless) {
   try {
     const getHost = require('./get-host');
     const host = await getHost(serverless);
+    console.log(`npx sls migrations up --stage=${serverless.variables.options.stage} --dbHost=${host}`);
     if (host) {
       return `npx sls migrations up --stage=${serverless.variables.options.stage} --dbHost=${host}`;
     }
