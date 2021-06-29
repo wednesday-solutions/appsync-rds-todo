@@ -13,6 +13,7 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false
       },
       userRef: {
+        field: 'user_ref',
         type: DataTypes.TEXT,
         allowNull: false
       }
@@ -22,6 +23,7 @@ module.exports = function (sequelize, DataTypes) {
       tableName: 'users',
       schema: 'public',
       timestamps: true,
+      underscored: true,
       paranoid: true,
       indexes: [
         {

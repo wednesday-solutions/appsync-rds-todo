@@ -17,6 +17,7 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false
       },
       listId: {
+        field: 'list_id',
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
@@ -30,7 +31,8 @@ module.exports = function (sequelize, DataTypes) {
       tableName: 'notes',
       schema: 'public',
       paranoid: true,
-      timestamps: true
+      timestamps: true,
+      underscored: true
     }
   );
 };

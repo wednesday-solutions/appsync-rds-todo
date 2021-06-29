@@ -1,7 +1,10 @@
 #set( $cols = [] )
 #set( $vals = [] )
 #foreach( $entry in $ctx.args.input.keySet() )
-  #set( $discard = $cols.add("\\"$entry\\"") )
+  #set( $regex = "([a-z])([A-Z]+)")
+  #set( $replacement = "$1_$2")
+  #set( $toSnake = $entry.replaceAll($regex, $replacement).toLowerCase() )
+  #set( $discard = $cols.add("$toSnake") )
   #if( $util.isBoolean($ctx.args.input[$entry]) )
       #if( $ctx.args.input[$entry] )
         #set( $discard = $vals.add("1") )
@@ -15,11 +18,10 @@
 
 #set( $valStr = $vals.toString().replace("[","(").replace("]",")") )
 #set( $colStr = $cols.toString().replace("[","(").replace("]",")") )
-
-#if ( $valStr.get(0) != "(" )
+#if ( $valStr.substring(0, 1) != '(' )
   #set( $valStr = "($valStr)" )
 #end
-#if ( $colStr.get(0) != "(" )
+#if ( $colStr.substring(0, 1) != '(' )
   #set( $colStr = "($colStr)" )
 #end
 {

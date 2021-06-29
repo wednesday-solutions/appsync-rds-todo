@@ -13,6 +13,7 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false
       },
       userId: {
+        field: 'user_id',
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
@@ -27,6 +28,7 @@ module.exports = function (sequelize, DataTypes) {
       schema: 'public',
       timestamps: true,
       paranoid: true,
+      underscored: true,
       indexes: [
         {
           name: 'list__idx__name',

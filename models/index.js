@@ -36,6 +36,7 @@ export function getDB() {
         define: {
           paranoid: true,
           underScored: true,
+          underscoredAll: true,
           timestamps: true
         }
       }
@@ -47,10 +48,10 @@ export function getDB() {
   const notes = _notes(sequelize, DataTypes);
   const users = _users(sequelize, DataTypes);
 
-  notes.belongsTo(lists, { foreignKey: 'listId' });
-  lists.hasMany(notes, { foreignKey: 'listId' });
-  lists.belongsTo(users, { foreignKey: 'userId' });
-  users.hasMany(lists, { foreignKey: 'userId' });
+  notes.belongsTo(lists, { foreignKey: 'list_id' });
+  lists.hasMany(notes, { foreignKey: 'list_id' });
+  lists.belongsTo(users, { foreignKey: 'user_id' });
+  users.hasMany(lists, { foreignKey: 'user_id' });
 
   db = {
     lists,

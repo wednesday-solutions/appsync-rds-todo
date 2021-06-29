@@ -2,19 +2,19 @@ CREATE TABLE IF NOT EXISTS notes (
 	id SERIAL,
 	note TEXT NOT NULL,
 	deadline timestamp WITH time zone NOT NULL,
-	"listId" INT NOT NULL,
-    "createdAt" timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-    "deletedAt" timestamp NULL,
+	list_id INT NOT NULL,
+    created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+    deleted_at timestamp NULL,
 
-	CONSTRAINT notes__fk_listId FOREIGN KEY (
-		"listId"
+	CONSTRAINT notes__fk_list_id FOREIGN KEY (
+		list_id
 ) REFERENCES lists (
 		id
 ) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE INDEX IF NOT EXISTS notes__idx__listId ON notes ("listId");
+CREATE INDEX IF NOT EXISTS notes__idx__list_id ON notes (list_id);
 CREATE INDEX IF NOT EXISTS notes__idx__note ON notes ("note");
 
 CREATE TRIGGER set_timestamp

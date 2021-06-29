@@ -63,7 +63,8 @@ export const findAll = async (model, event) => {
   const itemsWithCount = await model.findAndCountAll({
     where,
     include: include || [],
-    underscoredAll: false,
+    underscored: true,
+    underscoredAll: true,
     ...paginationArgs,
     distinct: true
   });
