@@ -51,7 +51,9 @@ custom:
       dbPort: ${file(./set-db-environment.js):env.DB_PORT}
   userPoolName: ${self:service.name}-${env:STAGE}-user-pool
   webpack:
-    includeModules: true
+    includeModules:
+      forceInclude:
+        - sequelize-cli
     excludeFiles: ./**/*.test.js
   dynamodb:
     stages:

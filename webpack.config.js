@@ -26,7 +26,12 @@ module.exports = {
       }
     ]
   },
-  plugins: [new CopyPlugin([{ from: './migrations/**/*.*', to: 'migrations' }])],
+  plugins: [
+    new CopyPlugin([
+      { from: './migrations/**/*.*', to: '' },
+      { from: './config/config.js', to: 'config/config.js' }
+    ])
+  ],
   resolve: {
     modules: ['node_modules', './'],
     alias: {
