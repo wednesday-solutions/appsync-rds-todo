@@ -23,23 +23,6 @@ Resources:
       DBClusterParameterGroupName: "default.aurora-postgresql10"
       VpcSecurityGroupIds:
         - !Ref "ServerlessSecurityGroup"
-  # RDSClusterParameter:
-  #   Type: AWS::RDS::DBClusterParameterGroup
-  #   Properties:
-  #     Description: Parameter group for the Serverless Aurora RDS DB.
-  #     Family: aurora-postgresql9.6
-  #     Parameters:
-  #       character_set_database: "UTF8"
-  # RDSDBParameterGroup:
-  #   Type: AWS::RDS::DBParameterGroup
-  #   Properties:
-  #     Description: Parameter group for the Serverless Aurora RDS DB.
-  #     Family: aurora-postgresql9.6
-  #     Parameters:
-  #       sql_mode: IGNORE_SPACE
-  #       max_connections: 100
-  #       wait_timeout: 900
-  #       interactive_timeout: 900
 Outputs:
   RDSHost:
     Description: Host of the AppSync-RDS-todo RDS instance

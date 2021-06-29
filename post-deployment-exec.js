@@ -1,16 +1,5 @@
 async function migrate(serverless) {
-  try {
-    const getHost = require('./get-host');
-    const host = await getHost(serverless);
-    console.log(`npx sls migrations up --stage=${serverless.variables.options.stage} --dbHost=${host}`);
-    if (host) {
-      return `npx sls migrations up --stage=${serverless.variables.options.stage} --dbHost=${host}`;
-    }
-  } catch (e) {
-    serverless.cli.log('Migration failed.');
-    serverless.cli.log(e);
-  }
-  return '';
+  return `npx sls invoke --function databaseMigrate --stage=${serverless.variables.options.stage}`;
 }
 async function postDeployment(serverless) {
   return await migrate(serverless);

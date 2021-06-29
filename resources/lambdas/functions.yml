@@ -27,4 +27,15 @@ lists:
     subnetIds:
       - Ref: ServerlessPrivateSubnetA
       - Ref: ServerlessPrivateSubnetB
+      - Ref: ServerlessPrivateSubnetC
+databaseMigrate:
+  handler: functions/database/migrate/index.handler
+  role: LambdaServiceRole
+  webpack: false
+  vpc:
+    securityGroupIds:
+      - !Ref ServerlessSecurityGroup
+    subnetIds:
+      - Ref: ServerlessPrivateSubnetA
+      - Ref: ServerlessPrivateSubnetB
       - Ref: ServerlessPrivateSubnetC        

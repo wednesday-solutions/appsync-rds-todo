@@ -47,6 +47,7 @@
     "serverless-plugin-warmup": "^5.2.1",
     "serverless-sequelize-migrations": "^1.1.1",
     "serverless-webpack": "^5.3.4",
+    "shelljs": "^0.8.4",
     "source-map-support": "^0.5.19",
     "webpack": "^4.44.1",
     "webpack-node-externals": "^2.5.2"
@@ -82,6 +83,7 @@
     "@babel/preset-env": "^7.11.5",
     "aws-cognito-cli": "^1.0.9",
     "babel-eslint": "^10.1.0",
+    "copy-webpack-plugin": "5.1.1",
     "dotenv": "^8.2.0",
     "eslint": "5.16.0",
     "eslint-config-prettier": "^4.1.0",
@@ -101,8 +103,7 @@
     "prettier-config-standard": "^1.0.1",
     "prettier-standard": "^16.4.1",
     "pretty-quick": "^3.1.0",
-    "serverless-nested-stack": "^0.0.7",
-    "shelljs": "^0.8.4"
+    "serverless-nested-stack": "^0.0.7"
   },
   "precommit": "lint:staged",
   "lint-staged": {
