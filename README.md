@@ -1,6 +1,6 @@
 # AppSync RDS ToDo
 
-This is a boilerplate AppSync-aurora project, that is deployed using the serverless framework.
+This is a boilerplate AppSync-aurora project, that is deployed using the serverless framework with out of the box support for automated creation of a Serverless database cluster, lambdas, vpcs, security groups, nat gateways, etc. 
 
 
 This project exposes the following queries and mutations
@@ -41,10 +41,10 @@ type Mutation {
 
     This project handles creation of all resources expect the secret manager, which you will need to create yourself and add the ARN to the environment.
     I've used an ApiKey for authentication for this project but to know more about how to integrate AppSync with cognito take a look at the following implementaions
-    - https://github.com/wednesday-solutions/serverless/tree/master/aws/cognito/federated-plus-passwordless-login
-    - https://github.com/wednesday-solutions/serverless/tree/master/aws/cognito/federated-signin
-    - https://github.com/wednesday-solutions/serverless/tree/master/aws/cognito/passwordless-login
-    - https://github.com/wednesday-solutions/serverless/tree/master/aws/cognito/srp
+    - [Federated and passwordless login](https://github.com/wednesday-solutions/serverless/tree/master/aws/cognito/federated-plus-passwordless-login)
+    - [Federated Sign in](https://github.com/wednesday-solutions/serverless/tree/master/aws/cognito/federated-signin)
+    - [Passwordless login](https://github.com/wednesday-solutions/serverless/tree/master/aws/cognito/passwordless-login)
+    - [SRP](https://github.com/wednesday-solutions/serverless/tree/master/aws/cognito/srp)
 
     Creation of the following resources is automated
     - [Serverless Aurora cluster](resources/rds/resources.yml)
@@ -75,13 +75,14 @@ type Mutation {
     - [functions/queries/Notes/index.js](functions/queries/Notes/index.js)
 - Support for serverless-webpack, which allows you to use the latest JavaScript functionality in your lambdas
 - Support for serverless-dotenv, which allows you to deploy easily to multiple environments
+- Out of the box support for sequelize
 - Out of the box CI/CD pipelines with support to innject environment variables using Github Secrets
     - [.github/workflows/ci.yml](.github/workflows/ci.yml)
     - [.github/workflows/cd.yml](.github/workflows/cd.yml)
 
 ## Adding features on top of the template
 
-What we've done here is built a base on top of which we can incrementally add new features easily. \
+What we've done here is built a base on top of which we can incrementally add new features easily. 
 ### Adding a new table
 - Create a new migration file
 - Increment the version in `migrations/resources/` and add the necessary .sql
@@ -92,59 +93,49 @@ What we've done here is built a base on top of which we can incrementally add ne
 - Create a Lambda
 Take a look at the following lambda, you just need to change the model that you're passing to findAll
 [functions/queries/Notes/index.js](functions/queries/Notes/index.js)
-```
-exports.handler = async (event, context, callback) =>
-  logHandler(event, callback, async () => {
-    try {
-      return success(context.done || callback, await findAll(db[<new-model-you-created>], event));
-    } catch (err) {
-      return failure(context.fail || callback, err);
-    }
-  });
+    ```
+    exports.handler = async (event, context, callback) =>
+      logHandler(event, callback, async () => {
+        try {
+          return success(context.done || callback, await findAll(db[<new-model-you-created>], event));
+        } catch (err) {
+          return failure(context.fail || callback, err);
+        }
+      });
 
-```
+    ```
 - Add the Lambda in the `resources/lambdas/functions.yml`
-```
-<name-of-function>:
-  handler: <path-to-newly-created-function>.handler
-  role: <either use `LambdaServiceRole` or create a new role as required>
-  vpc:
-    securityGroupIds:
-      - !Ref ServerlessSecurityGroup
-    subnetIds:
-      - Ref: ServerlessPrivateSubnetA
-      - Ref: ServerlessPrivateSubnetB
-      - Ref: ServerlessPrivateSubnetC
-```
+    ```
+    <name-of-function>:
+      handler: <path-to-newly-created-function>.handler
+      role: <either use `LambdaServiceRole` or create a new role as required>
+      vpc:
+        securityGroupIds:
+          - !Ref ServerlessSecurityGroup
+        subnetIds:
+          - Ref: ServerlessPrivateSubnetA
+          - Ref: ServerlessPrivateSubnetB
+          - Ref: ServerlessPrivateSubnetC
+    ```
 - Add the Lambda as a datasource in the `resources/lambdas/datasources.yml`
-```
-- type: AWS_LAMBDA
-  name: Lambda_<name-of-function>
-  description: "<Proper description>"
-  config:
-    functionName: <name-of-the-function-as-in-the-functions.yml>
-```
+    ```
+    - type: AWS_LAMBDA
+      name: Lambda_<name-of-function>
+      description: "<Proper description>"
+      config:
+        functionName: <name-of-the-function-as-in-the-functions.yml>
+    ```
 - Add the query in resources/mapping-templates/queries.yml
 
-```
-- type: Query
-  field: <name-of-field-in-graphql-schema>
-  request: "queries/query.req.vtl"
-  response: "response.vtl"
-  dataSource: <name-as-mentioned-in-the-lambdas/datasources.yml>
-```
+    ```
+    - type: Query
+      field: <name-of-field-in-graphql-schema>
+      request: "queries/query.req.vtl"
+      response: "response.vtl"
+      dataSource: <name-as-mentioned-in-the-lambdas/datasources.yml>
+    ```
 
 ###  Adding a mutation
-- Add the mutation in `resources/mapping-templates/mutations.yml`
-
-```
-- type: Mutation
-  field: createNote
-  request: "mutations/createNote.req.vtl"
-  response: "mutations/response.vtl"
-  dataSource: POSTGRES_RDS
-```
-
 - Create a new request resolver, based on the type of the mutation you can use one of the following templates
 
     - Create
@@ -212,11 +203,12 @@ exports.handler = async (event, context, callback) =>
             }
         ```
 
+- Add a mutation in `resources/mapping-templates/mutations.yml`
 
-```
-- type: Mutation
-  field: <name-of-field-in-graphql-schema>
-  request: "mutations/<name-of-the-newly-created-request>.vtl"
-  response: "mutations/response.vtl"
-  dataSource: POSTGRES_RDS
-```
+    ```
+    - type: Mutation
+      field: createNote
+      request: "mutations/createNote.req.vtl"
+      response: "mutations/response.vtl"
+      dataSource: POSTGRES_RDS
+    ```
