@@ -18,12 +18,12 @@ provider:
   awsRegion: ${env:REGION}
   versionFunctions: false
   environment:
-    DB_DIALECT: ${file(./set-db-environment.js):env.DB_DIALECT}
-    DB_NAME: ${file(./set-db-environment.js):env.DB_NAME}
-    DB_HOST: ${file(./set-db-environment.js):env.DB_HOST}
-    DB_USERNAME: ${file(./set-db-environment.js):env.DB_USERNAME}
-    DB_PASSWORD: ${file(./set-db-environment.js):env.DB_PASSWORD}
-    DB_PORT: ${file(./set-db-environment.js):env.DB_PORT}
+    DB_DIALECT: ${file(./scripts/set-db-environment.js):env.DB_DIALECT}
+    DB_NAME: ${file(./scripts/set-db-environment.js):env.DB_NAME}
+    DB_HOST: ${file(./scripts/set-db-environment.js):env.DB_HOST}
+    DB_USERNAME: ${file(./scripts/set-db-environment.js):env.DB_USERNAME}
+    DB_PASSWORD: ${file(./scripts/set-db-environment.js):env.DB_PASSWORD}
+    DB_PORT: ${file(./scripts/set-db-environment.js):env.DB_PORT}
 resources:
   - ${file(./resources/config/roles.yml)}
   - ${file(./resources/config/vpc.yml)}
@@ -43,12 +43,12 @@ custom:
     location: ".webpack/service"
     buildPrefix: .webpack/service
     rds:
-      dbName: ${file(./set-db-environment.js):env.DB_NAME}
-      dbHost: ${file(./set-db-environment.js):env.DB_HOST}
-      dbDialect: ${file(./set-db-environment.js):env.DB_DIALECT}
-      dbUsername: ${file(./set-db-environment.js):env.DB_USERNAME}
-      dbPassword: ${file(./set-db-environment.js):env.DB_PASSWORD}
-      dbPort: ${file(./set-db-environment.js):env.DB_PORT}
+      dbName: ${file(./scripts/set-db-environment.js):env.DB_NAME}
+      dbHost: ${file(./scripts/set-db-environment.js):env.DB_HOST}
+      dbDialect: ${file(./scripts/set-db-environment.js):env.DB_DIALECT}
+      dbUsername: ${file(./scripts/set-db-environment.js):env.DB_USERNAME}
+      dbPassword: ${file(./scripts/set-db-environment.js):env.DB_PASSWORD}
+      dbPort: ${file(./scripts/set-db-environment.js):env.DB_PORT}
   userPoolName: ${self:service.name}-${env:STAGE}-user-pool
   webpack:
     includeModules:
