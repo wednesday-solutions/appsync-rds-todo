@@ -1,6 +1,4 @@
-#set( $deletedAt = "deleted_at" )
-#set( $statement = "UPDATE notes set $deletedAt=NOW() WHERE id=$ctx.args.id" )
 {
   "version": "2018-05-29",
-  "statements":   ["UPDATE notes set $deletedAt=NOW() WHERE id=$ctx.args.id", "SELECT * FROM notes WHERE id=$ctx.args.id"]
+  "statements":   ["UPDATE notes set deleted_at=NOW() WHERE id=$ctx.args.id", "SELECT * FROM notes WHERE id=$ctx.args.id"]
 }

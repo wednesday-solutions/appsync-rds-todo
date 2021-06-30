@@ -3,6 +3,39 @@
 This is a boilerplate AppSync-aurora project, that is deployed using the serverless framework.
 
 
+This project exposes the following queries and mutations
+## Queries
+
+```
+type Query {
+  notes(pagination: PaginationInput!, where: AWSJSON): PaginatedNotes!
+  lists(pagination: PaginationInput!, where: AWSJSON): PaginatedLists!
+  users(pagination: PaginationInput!, where: AWSJSON): PaginatedUsers!
+}
+```
+
+## Mutations
+
+```
+type Mutation {
+  # create mutations
+  createNote(input: CreateNoteRequest!): MutatedNote!
+  createList(input: CreateListRequest!): MutatedList!
+  createUser(input: CreateUserRequest!): MutatedUser!
+
+  # update mutations
+  updateList(input: UpdateListRequest!): MutatedList!
+  updateNote(input: UpdateNoteRequest!): MutatedNote!
+  updateUser(input: UpdateUserRequest!): MutatedUser!
+
+  # delete mutations
+  deleteList(id: ID!): MutatedList!
+  deleteNote(id: ID!): MutatedNote!
+  deleteUser(id: ID!): MutatedUser!
+}
+```
+
+
 ## Highlights 
 - Automated creation of resources
 
@@ -45,4 +78,145 @@ This is a boilerplate AppSync-aurora project, that is deployed using the serverl
 - Out of the box CI/CD pipelines with support to innject environment variables using Github Secrets
     - [.github/workflows/ci.yml](.github/workflows/ci.yml)
     - [.github/workflows/cd.yml](.github/workflows/cd.yml)
-    
+
+## Adding features on top of the template
+
+What we've done here is built a base on top of which we can incrementally add new features easily. \
+### Adding a new table
+- Create a new migration file
+- Increment the version in `migrations/resources/` and add the necessary .sql
+- Create the sequelize model in the `models/` folder
+
+
+### Adding a new query
+- Create a Lambda
+Take a look at the following lambda, you just need to change the model that you're passing to findAll
+[functions/queries/Notes/index.js](functions/queries/Notes/index.js)
+```
+exports.handler = async (event, context, callback) =>
+  logHandler(event, callback, async () => {
+    try {
+      return success(context.done || callback, await findAll(db[<new-model-you-created>], event));
+    } catch (err) {
+      return failure(context.fail || callback, err);
+    }
+  });
+
+```
+- Add the Lambda in the `resources/lambdas/functions.yml`
+```
+<name-of-function>:
+  handler: <path-to-newly-created-function>.handler
+  role: <either use `LambdaServiceRole` or create a new role as required>
+  vpc:
+    securityGroupIds:
+      - !Ref ServerlessSecurityGroup
+    subnetIds:
+      - Ref: ServerlessPrivateSubnetA
+      - Ref: ServerlessPrivateSubnetB
+      - Ref: ServerlessPrivateSubnetC
+```
+- Add the Lambda as a datasource in the `resources/lambdas/datasources.yml`
+```
+- type: AWS_LAMBDA
+  name: Lambda_<name-of-function>
+  description: "<Proper description>"
+  config:
+    functionName: <name-of-the-function-as-in-the-functions.yml>
+```
+- Add the query in resources/mapping-templates/queries.yml
+
+```
+- type: Query
+  field: <name-of-field-in-graphql-schema>
+  request: "queries/query.req.vtl"
+  response: "response.vtl"
+  dataSource: <name-as-mentioned-in-the-lambdas/datasources.yml>
+```
+
+###  Adding a mutation
+- Add the mutation in `resources/mapping-templates/mutations.yml`
+
+```
+- type: Mutation
+  field: createNote
+  request: "mutations/createNote.req.vtl"
+  response: "mutations/response.vtl"
+  dataSource: POSTGRES_RDS
+```
+
+- Create a new request resolver, based on the type of the mutation you can use one of the following templates
+
+    - Create
+        ```
+            #set( $cols = [] )
+            #set( $vals = [] )
+            #foreach( $entry in $ctx.args.input.keySet() )
+              #set( $regex = "([a-z])([A-Z]+)")
+              #set( $replacement = "$1_$2")
+              #set( $toSnake = $entry.replaceAll($regex, $replacement).toLowerCase() )
+              #set( $discard = $cols.add("$toSnake") )
+              #if( $util.isBoolean($ctx.args.input[$entry]) )
+                  #if( $ctx.args.input[$entry] )
+                    #set( $discard = $vals.add("1") )
+                  #else
+                    #set( $discard = $vals.add("0") )
+                  #end
+              #else
+                  #set( $discard = $vals.add("'$ctx.args.input[$entry]'") )
+              #end
+            #end
+
+            #set( $valStr = $vals.toString().replace("[","(").replace("]",")") )
+            #set( $colStr = $cols.toString().replace("[","(").replace("]",")") )
+            #if ( $valStr.substring(0, 1) != '(' )
+              #set( $valStr = "($valStr)" )
+            #end
+            #if ( $colStr.substring(0, 1) != '(' )
+              #set( $colStr = "($colStr)" )
+            #end
+            {
+              "version": "2018-05-29",
+              "statements":   ["INSERT INTO <name-of-table> $colStr VALUES $valStr", "SELECT * FROM <name-of-table> ORDER BY id DESC LIMIT 1"]
+            }
+        ```
+    - Update
+        ```
+            #set( $update = "" )
+            #set( $equals = "=" )
+            #foreach( $entry in $ctx.args.input.keySet() )
+               #set( $cur = $ctx.args.input[$entry] )
+               #if( $util.isBoolean($cur) )
+                   #if( $cur )
+                     #set ( $cur = "1" )
+                   #else
+                     #set ( $cur = "0" )
+                   #end
+               #end
+               #if ( $util.isNullOrEmpty($update) )
+                  #set($update = "$entry$equals'$cur'" )
+               #else
+                  #set($update = "$update,$entry$equals'$cur'" )
+               #end
+            #end
+            {
+              "version": "2018-05-29",
+              "statements":   ["UPDATE <name-of-table> SET $update WHERE id=$ctx.args.input.id", "SELECT * FROM <name-of-table> WHERE id=$ctx.args.input.id"]
+            }
+        ```
+    - Delete
+        ```
+            {
+              "version": "2018-05-29",
+              "statements":   ["UPDATE <name-of-table> set deleted_at=NOW() WHERE id=$ctx.args.id", "SELECT * FROM <name-of-table> WHERE id=$ctx.args.id"]
+            }
+        ```
+
+
+```
+- type: Mutation
+  field: <name-of-field-in-graphql-schema>
+  request: "mutations/<name-of-the-newly-created-request>.vtl"
+  response: "mutations/response.vtl"
+  dataSource: POSTGRES_RDS
+```
