@@ -1,7 +1,6 @@
 {
   "name": "appsync-rds-todo",
   "version": "0.1.0",
-  "private": true,
   "keywords": [
     "AppSync",
     "AWS",
@@ -64,6 +63,7 @@
   },
   "scripts": {
     "debug": "export SLS_DEBUG=*",
+    "build": "npx serverless package --stage develop",
     "build-dev": "sls package --stage=develop",
     "link-serverless-appsync-simulator": "yarn link serverless-appsync-simulator",
     "start-offline": "sls offline start --stage=develop",
