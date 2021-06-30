@@ -1,0 +1,29 @@
+name: bankshift-api continuous integration
+
+on:
+  pull_request:
+    branches: 
+      - master
+      - qa
+      - develop`
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [13.x]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup environment
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: "12"
+      - name: Install dependencies
+        run: yarn
+      - name: Lint
+        run: yarn lint:eslint .
+      - name: Build
+        run: yarn build
+      - name: Run test
+        run: yarn test
