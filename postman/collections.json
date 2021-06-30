@@ -1,0 +1,379 @@
+{
+  "info": {
+    "_postman_id": "fc6a537a-7479-41fa-9d66-4d53b6f391de",
+    "name": "localhost:20002/graphql",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "query",
+      "item": [
+        {
+          "name": "query notes",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"errors is undefined\", function() {",
+                  "    const response = JSON.parse(responseBody);",
+                  "    pm.expect(response.errors).to.be.undefined",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "x-api-key", "value": "0123456789", "type": "text", "disabled": false }],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query Notes(\n  $notesPagination: PaginationInput!\n  $notesWhere: AWSJSON\n  $notesPagination: PaginationInput!\n) {\n  notes(pagination: $notesPagination, where: $notesWhere) {\n    items {\n      id\n      note\n      listId\n      deadline\n      list {\n        id\n        name\n        notes(pagination: $notesPagination) {\n          id\n          note\n          listId\n          deadline\n        }\n      }\n    }\n  }\n}\n",
+                "variables": "{\n  \"notesPagination\": null,\n  \"notesWhere\": null\n}\n"
+              }
+            },
+            "url": { "raw": "http://localhost:20002/graphql", "host": ["http://localhost:20002/graphql"] }
+          },
+          "response": []
+        },
+        {
+          "name": "query lists",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"errors is undefined\", function() {",
+                  "    const response = JSON.parse(responseBody);",
+                  "    pm.expect(response.errors).to.be.undefined",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "x-api-key", "value": "0123456789", "type": "text", "disabled": false }],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query Lists(\n  $listsPagination: PaginationInput!\n  $listsWhere: AWSJSON\n  $notesPagination: PaginationInput!\n) {\n  lists(pagination: $listsPagination, where: $listsWhere) {\n    items {\n      id\n      name\n      notes(pagination: $notesPagination) {\n        id\n        note\n        listId\n        deadline\n        list {\n          id\n          name\n        }\n      }\n    }\n  }\n}\n",
+                "variables": "{\n  \"listsPagination\": null,\n  \"listsWhere\": null,\n  \"notesPagination\": null\n}\n"
+              }
+            },
+            "url": { "raw": "http://localhost:20002/graphql", "host": ["http://localhost:20002/graphql"] }
+          },
+          "response": []
+        },
+        {
+          "name": "query users",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"errors is undefined\", function() {",
+                  "    const response = JSON.parse(responseBody);",
+                  "    pm.expect(response.errors).to.be.undefined",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "x-api-key", "value": "0123456789", "type": "text", "disabled": false }],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query Users(\n  $usersPagination: PaginationInput!\n  $usersWhere: AWSJSON\n  $listsPagination: PaginationInput!\n  $notesPagination: PaginationInput!\n) {\n  users(pagination: $usersPagination, where: $usersWhere) {\n    items {\n      id\n      name\n      userRef\n      lists(pagination: $listsPagination) {\n        id\n        name\n        notes(pagination: $notesPagination) {\n          id\n          note\n          listId\n          deadline\n        }\n      }\n    }\n  }\n}\n",
+                "variables": "{\n  \"usersPagination\": null,\n  \"usersWhere\": null,\n  \"listsPagination\": null,\n  \"notesPagination\": null\n}\n"
+              }
+            },
+            "url": { "raw": "http://localhost:20002/graphql", "host": ["http://localhost:20002/graphql"] }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "mutation",
+      "item": [
+        {
+          "name": "mutation createNote",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"errors is undefined\", function() {",
+                  "    const response = JSON.parse(responseBody);",
+                  "    pm.expect(response.errors).to.be.undefined",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "x-api-key", "value": "0123456789", "type": "text", "disabled": false }],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation CreateNote($createNoteInput: CreateNoteRequest!) {\n  createNote(input: $createNoteInput) {\n    id\n    note\n    listId\n    deadline\n  }\n}\n",
+                "variables": "{\n  \"createNoteInput\": null\n}\n"
+              }
+            },
+            "url": { "raw": "http://localhost:20002/graphql", "host": ["http://localhost:20002/graphql"] }
+          },
+          "response": []
+        },
+        {
+          "name": "mutation updateNote",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"errors is undefined\", function() {",
+                  "    const response = JSON.parse(responseBody);",
+                  "    pm.expect(response.errors).to.be.undefined",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "x-api-key", "value": "0123456789", "type": "text", "disabled": false }],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation UpdateNote($updateNoteInput: UpdateNoteRequest!) {\n  updateNote(input: $updateNoteInput) {\n    id\n    note\n    listId\n    deadline\n  }\n}\n",
+                "variables": "{\n  \"updateNoteInput\": null\n}\n"
+              }
+            },
+            "url": { "raw": "http://localhost:20002/graphql", "host": ["http://localhost:20002/graphql"] }
+          },
+          "response": []
+        },
+        {
+          "name": "mutation updateUser",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"errors is undefined\", function() {",
+                  "    const response = JSON.parse(responseBody);",
+                  "    pm.expect(response.errors).to.be.undefined",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "x-api-key", "value": "0123456789", "type": "text", "disabled": false }],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation UpdateUser($updateUserInput: UpdateUserRequest!) {\n  updateUser(input: $updateUserInput) {\n    id\n    name\n    userRef\n  }\n}\n",
+                "variables": "{\n  \"updateUserInput\": null\n}\n"
+              }
+            },
+            "url": { "raw": "http://localhost:20002/graphql", "host": ["http://localhost:20002/graphql"] }
+          },
+          "response": []
+        },
+        {
+          "name": "mutation deleteList",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"errors is undefined\", function() {",
+                  "    const response = JSON.parse(responseBody);",
+                  "    pm.expect(response.errors).to.be.undefined",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "x-api-key", "value": "0123456789", "type": "text", "disabled": false }],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation DeleteList($deleteListId: ID!) {\n  deleteList(id: $deleteListId) {\n    id\n    name\n    userId\n  }\n}\n",
+                "variables": "{\n  \"deleteListId\": null\n}\n"
+              }
+            },
+            "url": { "raw": "http://localhost:20002/graphql", "host": ["http://localhost:20002/graphql"] }
+          },
+          "response": []
+        },
+        {
+          "name": "mutation deleteUser",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"errors is undefined\", function() {",
+                  "    const response = JSON.parse(responseBody);",
+                  "    pm.expect(response.errors).to.be.undefined",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "x-api-key", "value": "0123456789", "type": "text", "disabled": false }],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation DeleteUser($deleteUserId: ID!) {\n  deleteUser(id: $deleteUserId) {\n    id\n    name\n    userRef\n  }\n}\n",
+                "variables": "{\n  \"deleteUserId\": null\n}\n"
+              }
+            },
+            "url": { "raw": "http://localhost:20002/graphql", "host": ["http://localhost:20002/graphql"] }
+          },
+          "response": []
+        },
+        {
+          "name": "mutation updateList",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"errors is undefined\", function() {",
+                  "    const response = JSON.parse(responseBody);",
+                  "    pm.expect(response.errors).to.be.undefined",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "x-api-key", "value": "0123456789", "type": "text", "disabled": false }],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation UpdateList($updateListInput: UpdateListRequest!) {\n  updateList(input: $updateListInput) {\n    id\n    name\n    userId\n  }\n}\n",
+                "variables": "{\n  \"updateListInput\": null\n}\n"
+              }
+            },
+            "url": { "raw": "http://localhost:20002/graphql", "host": ["http://localhost:20002/graphql"] }
+          },
+          "response": []
+        },
+        {
+          "name": "mutation createUser",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"errors is undefined\", function() {",
+                  "    const response = JSON.parse(responseBody);",
+                  "    pm.expect(response.errors).to.be.undefined",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "x-api-key", "value": "0123456789", "type": "text", "disabled": false }],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation CreateUser($createUserInput: CreateUserRequest!) {\n  createUser(input: $createUserInput) {\n    id\n    name\n    userRef\n  }\n}\n",
+                "variables": "{\n  \"createUserInput\": null\n}\n"
+              }
+            },
+            "url": { "raw": "http://localhost:20002/graphql", "host": ["http://localhost:20002/graphql"] }
+          },
+          "response": []
+        },
+        {
+          "name": "mutation createList",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"errors is undefined\", function() {",
+                  "    const response = JSON.parse(responseBody);",
+                  "    pm.expect(response.errors).to.be.undefined",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "x-api-key", "value": "0123456789", "type": "text", "disabled": false }],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation CreateList($createListInput: CreateListRequest!) {\n  createList(input: $createListInput) {\n    id\n    name\n    userId\n  }\n}\n",
+                "variables": "{\n  \"createListInput\": null\n}\n"
+              }
+            },
+            "url": { "raw": "http://localhost:20002/graphql", "host": ["http://localhost:20002/graphql"] }
+          },
+          "response": []
+        },
+        {
+          "name": "mutation deleteNote",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"errors is undefined\", function() {",
+                  "    const response = JSON.parse(responseBody);",
+                  "    pm.expect(response.errors).to.be.undefined",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "x-api-key", "value": "0123456789", "type": "text", "disabled": false }],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation DeleteNote($deleteNoteId: ID!) {\n  deleteNote(id: $deleteNoteId) {\n    id\n    note\n    listId\n    deadline\n  }\n}\n",
+                "variables": "{\n  \"deleteNoteId\": null\n}\n"
+              }
+            },
+            "url": { "raw": "http://localhost:20002/graphql", "host": ["http://localhost:20002/graphql"] }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

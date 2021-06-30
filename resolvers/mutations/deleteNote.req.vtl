@@ -1,0 +1,4 @@
+{
+  "version": "2018-05-29",
+  "statements":   ["UPDATE notes set deleted_at=NOW() WHERE id=$ctx.args.id", "SELECT * FROM notes WHERE id=$ctx.args.id"]
+}

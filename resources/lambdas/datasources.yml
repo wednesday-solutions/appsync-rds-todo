@@ -1,0 +1,15 @@
+- type: AWS_LAMBDA
+  name: Lambda_notes
+  description: "Get notes"
+  config:
+    functionName: notes
+- type: AWS_LAMBDA
+  name: Lambda_lists
+  description: "Get lists"
+  config:
+    functionName: lists
+- type: AWS_LAMBDA
+  name: Lambda_users
+  description: "Get users"
+  config:
+    functionName: users
