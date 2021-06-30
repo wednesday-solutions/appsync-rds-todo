@@ -2,7 +2,6 @@ service:
   name: ${env:NAME}
 plugins:
   - serverless-webpack
-  - serverless-sequelize-migrations
   - serverless-appsync-plugin
   - serverless-dotenv-plugin
   - serverless-appsync-simulator

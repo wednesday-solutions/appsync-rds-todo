@@ -2,6 +2,16 @@
   "name": "appsync-rds-todo",
   "version": "0.1.0",
   "private": true,
+  "keywords": [
+    "AppSync",
+    "AWS",
+    "serverless-framework",
+    "AWS Lambdas",
+    "serverless",
+    "RDS",
+    "postgres",
+    "GraphQL"
+  ],
   "dependencies": {
     "@aws-amplify/api": "^2.1.6",
     "@aws-amplify/pubsub": "^2.1.7",
