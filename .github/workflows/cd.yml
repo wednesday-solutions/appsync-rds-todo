@@ -22,7 +22,7 @@ jobs:
       - name: Create envfile
         uses: SpicyPizza/create-envfile@v1
         with:
-          envkey_DB_PASSWORD: ${{ secrets.DEV_DB_PASSWORD }}
+          envkey_DB_PASSWORD: ${{ secrets.DB_PASSWORD_DEV }}
           file_name: .env.${{steps.vars.outputs.stage}}.local
       - name: serverless deploy --stage=develop
         run: npx serverless deploy --stage=develop --force
