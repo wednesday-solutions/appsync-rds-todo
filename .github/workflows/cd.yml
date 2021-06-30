@@ -19,12 +19,11 @@ jobs:
       - name: Get branch name
         id: vars
         run: echo ::set-output name=stage::${GITHUB_REF#refs/*/}
-      # - name: Create envfile
-      #   uses: SpicyPizza/create-envfile@v1
-      #   with:
-      #     envkey_S3_AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     envkey_S3_AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     file_name: .env.${{steps.vars.outputs.stage}}.local
+      - name: Create envfile
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          envkey_DB_PASSWORD: ${{ secrets.DEV_DB_PASSWORD }}
+          file_name: .env.${{steps.vars.outputs.stage}}.local
       - name: serverless deploy --stage=develop
         run: npx serverless deploy --stage=develop --force
         env:
