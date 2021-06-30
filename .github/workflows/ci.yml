@@ -1,4 +1,4 @@
-name: bankshift-api continuous integration
+name: appsync-rds-todo CI Dev
 
 on:
   pull_request:

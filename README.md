@@ -35,6 +35,7 @@ type Mutation {
 }
 ```
 
+You can find the complete postman collection here: [Collection](postman/collection.json)
 
 ## Highlights 
 - Automated creation of resources
@@ -139,6 +140,7 @@ Take a look at the following lambda, you just need to change the model that you'
 - Create a new request resolver, based on the type of the mutation you can use one of the following templates
 
     - Create
+
         ```
             #set( $cols = [] )
             #set( $vals = [] )
@@ -171,7 +173,9 @@ Take a look at the following lambda, you just need to change the model that you'
               "statements":   ["INSERT INTO <name-of-table> $colStr VALUES $valStr", "SELECT * FROM <name-of-table> ORDER BY id DESC LIMIT 1"]
             }
         ```
+
     - Update
+
         ```
             #set( $update = "" )
             #set( $equals = "=" )
@@ -195,7 +199,9 @@ Take a look at the following lambda, you just need to change the model that you'
               "statements":   ["UPDATE <name-of-table> SET $update WHERE id=$ctx.args.input.id", "SELECT * FROM <name-of-table> WHERE id=$ctx.args.input.id"]
             }
         ```
+        
     - Delete
+
         ```
             {
               "version": "2018-05-29",
