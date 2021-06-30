@@ -38,7 +38,7 @@ functions: ${file(./resources/lambdas/functions.yml)}
 custom:
   scripts:
     hooks:
-      'aws:deploy:finalize:cleanup': ${file(./post-deployment-exec.js)}
+      'aws:deploy:finalize:cleanup': ${file(./scripts/post-deployment-exec.js)}
   appsync-simulator:
     location: ".webpack/service"
     buildPrefix: .webpack/service
