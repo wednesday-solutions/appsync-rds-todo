@@ -1,0 +1,32 @@
+#set ( $index = -1)
+#set ( $result = $util.parseJson($ctx.result) )
+#set ( $meta = $result.sqlStatementResults[1].columnMetadata)
+#foreach ($column in $meta)
+    #set ($index = $index + 1)
+    #if ( $column["typeName"] == "timestamptz" )
+        #set ($time = $result["sqlStatementResults"][1]["records"][0][$index]["stringValue"] )
+        #set ( $nowEpochMillis = $util.time.parseFormattedToEpochMilliSeconds("$time.substring(0,19)+0000", "yyyy-MM-dd HH:mm:ssZ") )
+        #set ( $isoDateTime = $util.time.epochMilliSecondsToISO8601($nowEpochMillis) )
+        $util.qr( $result["sqlStatementResults"][1]["records"][0][$index].put("stringValue", "$isoDateTime") )
+    #end   
+#end
+#set ( $res = $util.parseJson($util.rds.toJsonString($util.toJson($result)))[1][0] )
+#set ( $response = {} )
+#foreach($mapKey in $res.keySet())
+    #set ( $s = $mapKey.split("_") )
+    #set ( $camelCase="" )
+    #set ( $isFirst=true )
+    #foreach($entry in $s)
+        #if ( $isFirst )
+          #set ( $first = $entry.substring(0,1) )
+        #else
+          #set ( $first = $entry.substring(0,1).toUpperCase() )
+        #end
+        #set ( $isFirst=false )
+        #set ( $stringLength = $entry.length() )
+        #set ( $remaining = $entry.substring(1, $stringLength) )
+        #set ( $camelCase = "$camelCase$first$remaining" )
+    #end
+    $util.qr( $response.put("$camelCase", $res[$mapKey]) )
+#end
+$utils.toJson($response)

@@ -1,0 +1,4 @@
+/node-modules/**
+/dist/**
+/webpack/**
+/shellscripts/templates/**

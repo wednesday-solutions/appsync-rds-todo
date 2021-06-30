@@ -1,0 +1,114 @@
+type PageInfo {
+  total: Int!
+}
+input PaginationInput {
+ order: String
+ limit: Int!
+ offset: Int!
+}
+input CreateNoteRequest {
+  note: String!
+  listId: ID!
+  deadline: AWSDateTime!
+  done: Boolean
+}
+
+input CreateListRequest {
+  name: String!
+  userId: Int!
+}
+input UpdateNoteRequest {
+  id: ID!
+  note: String
+  listId: ID
+  done: Boolean
+  deadline: AWSDateTime
+}
+input UpdateListRequest {
+  id: ID!
+  name: String
+  userId: Int
+}
+input UpdateUserRequest {
+  id: ID!
+  name: String
+  userRef: String
+}
+
+input CreateUserRequest {
+  name: String!
+  userRef: String!
+}
+
+type MutatedList {
+  id: ID!
+  name: String!
+  userId: Int!
+}
+type MutatedUser {
+  id: ID!
+  name: String!
+  userRef: String!
+}
+type MutatedNote {
+  id: ID!
+  note: String!
+  listId: ID!
+  deadline: AWSDateTime!
+  done: Boolean!
+}
+type Note {
+  id: ID!
+  note: String!
+  listId: ID!
+  done: Boolean!
+  deadline: AWSDateTime!
+  list: List!
+}
+
+type List {
+  id: ID!
+  name: String!
+  user: User!
+  notes(pagination: PaginationInput!): [Note!]!
+}
+
+type User {
+  id: ID!
+  name: String!
+  userRef:String!
+  lists(pagination: PaginationInput!): [List!]!
+}
+type PaginatedLists {
+  items: [List!]!
+  pageInfo: PageInfo!
+}
+type PaginatedUsers {
+  items: [User!]!
+  pageInfo: PageInfo!
+}
+type PaginatedNotes {
+  items: [Note!]!
+  pageInfo: PageInfo!
+}
+type Query {
+  notes(pagination: PaginationInput!, where: AWSJSON): PaginatedNotes!
+  lists(pagination: PaginationInput!, where: AWSJSON): PaginatedLists!
+  users(pagination: PaginationInput!, where: AWSJSON): PaginatedUsers!
+}
+type Mutation {
+  # create mutations
+  createNote(input: CreateNoteRequest!): MutatedNote!
+  createList(input: CreateListRequest!): MutatedList!
+  createUser(input: CreateUserRequest!): MutatedUser!
+
+  # update mutations
+  updateList(input: UpdateListRequest!): MutatedList!
+  updateNote(input: UpdateNoteRequest!): MutatedNote!
+  updateUser(input: UpdateUserRequest!): MutatedUser!
+
+  # delete mutations
+  deleteList(id: ID!): MutatedList!
+  deleteNote(id: ID!): MutatedNote!
+  deleteUser(id: ID!): MutatedUser!
+}

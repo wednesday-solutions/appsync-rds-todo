@@ -1,0 +1,143 @@
+Resources:
+  ServerlessSubnetGroup:
+    DependsOn:
+      - ServerlessSubnetA
+      - ServerlessSubnetB
+      - ServerlessSubnetC
+
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: 'RDS Subnet Group'
+      SubnetIds:
+        - Ref: ServerlessSubnetA
+        - Ref: ServerlessSubnetB
+        - Ref: ServerlessSubnetC
+      Tags:
+        - Key: 'Name'
+          Value: 'ServerlessSubnetGroup'
+  ServerlessSubnetA:
+    DependsOn:
+      - ServerlessVPC
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: ServerlessVPC
+      AvailabilityZone: ${self:provider.region}a
+      CidrBlock: ${self:custom.AURORA.VPC_CIDR}.0.0.0/24
+      Tags:
+        - Key: 'Name'
+          Value: 'ServerlessSubnetA'
+  ServerlessSubnetB:
+    DependsOn:
+      - ServerlessVPC
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: ServerlessVPC
+      AvailabilityZone: ${self:provider.region}b
+      CidrBlock: ${self:custom.AURORA.VPC_CIDR}.0.1.0/24
+      Tags:
+        - Key: 'Name'
+          Value: 'ServerlessSubnetB'
+  ServerlessSubnetC:
+    DependsOn:
+      - ServerlessVPC
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: ServerlessVPC
+      AvailabilityZone: ${self:provider.region}c
+      CidrBlock: ${self:custom.AURORA.VPC_CIDR}.0.2.0/24
+      Tags:
+        - Key: 'Name'
+          Value: 'ServerlessSubnetC'
+  ServerlessPrivateSubnetA:
+    DependsOn: ServerlessVPC
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: ServerlessVPC
+      AvailabilityZone: ${self:provider.region}a
+      CidrBlock: ${self:custom.AURORA.VPC_CIDR}.0.3.0/24
+  ServerlessPrivateSubnetB:
+    DependsOn: ServerlessVPC
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: ServerlessVPC
+      AvailabilityZone: ${self:provider.region}b
+      CidrBlock: ${self:custom.AURORA.VPC_CIDR}.0.4.0/24
+  ServerlessPrivateSubnetC:
+    DependsOn: ServerlessVPC
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: ServerlessVPC
+      AvailabilityZone: ${self:provider.region}c
+      CidrBlock: ${self:custom.AURORA.VPC_CIDR}.0.5.0/24
+  DefaultPrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: ServerlessVPC
+  DefaultPrivateRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: DefaultPrivateRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: NatGatewayLambda
+  SubnetRouteTableAssociationLambdaPrivateA:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: ServerlessPrivateSubnetA
+      RouteTableId:
+        Ref: DefaultPrivateRouteTable
+  SubnetRouteTableAssociationLambdaPublicA:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: ServerlessSubnetA
+      RouteTableId:
+        Ref: RouteTablePublic
+  SubnetRouteTableAssociationLambdaPrivateB:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: ServerlessPrivateSubnetB
+      RouteTableId:
+        Ref: DefaultPrivateRouteTable
+  SubnetRouteTableAssociationLambdaPublicB:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: ServerlessSubnetB
+      RouteTableId:
+        Ref: RouteTablePublic
+  SubnetRouteTableAssociationLambdaPrivateC:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: ServerlessPrivateSubnetC
+      RouteTableId:
+        Ref: DefaultPrivateRouteTable
+  SubnetRouteTableAssociationLambdaPublicC:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: ServerlessSubnetC
+      RouteTableId:
+        Ref: RouteTablePublic
+
+Outputs:
+  ServerlessSubnetAId:
+    Description: The Id of the ServerlessSubnetA
+    Value: !Ref ServerlessSubnetA
+  ServerlessSubnetBId:
+    Description: The Id of the ServerlessSubnetB
+    Value: !Ref ServerlessSubnetB
+  ServerlessSubnetCId:
+    Description: The Id of the ServerlessSubnetC
+    Value: !Ref ServerlessSubnetC

@@ -1,0 +1,26 @@
+- type: RELATIONAL_DATABASE
+  name: POSTGRES_RDS
+  description: "Database"
+  config:
+    dbClusterIdentifier: { Ref: RDSCluster } # The identifier for RDSCluster. Where RDSCluster is the cluster defined in Resources
+    databaseName: appsync_rds_todo_${env:STAGE}
+    awsSecretStoreArn: ${env:AWS_SECRET_ARN}
+    iamRoleStatements: # custom IAM Role statements for this DataSource. Ignored if `serviceRoleArn` is present. Auto-generated if both `serviceRoleArn` and `iamRoleStatements` are omitted
+      - Effect: 'Allow'
+        Action:
+          - 'rds-data:DeleteItems'
+          - 'rds-data:ExecuteSql'
+          - 'rds-data:ExecuteStatement'
+          - 'rds-data:GetItems'
+          - 'rds-data:InsertItems'
+          - 'rds-data:UpdateItems'
+        Resource:
+          - 'arn:aws:rds:${env:REGION}:${env:ACCOUNT_ID}:cluster:*'
+          - 'arn:aws:rds:${env:REGION}:${env:ACCOUNT_ID}:cluster:*:*'
+      - Effect: 'Allow'
+        Action:
+          - 'secretsmanager:GetSecretValue'
+        Resource:
+          - 'arn:aws:secretsmanager:*:*:secret:rds-db-credentials/*'
+
+    region: ${env:REGION}

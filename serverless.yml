@@ -1,0 +1,71 @@
+service:
+  name: ${env:NAME}
+plugins:
+  - serverless-webpack
+  - serverless-appsync-plugin
+  - serverless-dotenv-plugin
+  - serverless-appsync-simulator
+  - serverless-offline
+  - serverless-plugin-scripts
+
+provider:
+  name: aws
+  timeout: 90
+  runtime: nodejs12.x
+  stage: ${env:STAGE}
+  region: ${env:REGION}
+  versionFunctions: false
+  environment:
+    DB_DIALECT: ${file(./scripts/set-db-environment.js):env.DB_DIALECT}
+    DB_NAME: ${file(./scripts/set-db-environment.js):env.DB_NAME}
+    DB_HOST: ${file(./scripts/set-db-environment.js):env.DB_HOST}
+    DB_USERNAME: ${file(./scripts/set-db-environment.js):env.DB_USERNAME}
+    DB_PASSWORD: ${file(./scripts/set-db-environment.js):env.DB_PASSWORD}
+    DB_PORT: ${file(./scripts/set-db-environment.js):env.DB_PORT}
+resources:
+  - ${file(./resources/config/roles.yml)}
+  - ${file(./resources/config/vpc.yml)}
+  - ${file(./resources/config/subnet.yml)}
+  - ${file(./resources/config/internet-gateway.yml)}
+  - ${file(./resources/config/route-public.yml)}
+  - ${file(./resources/config/security-groups.yml)}
+  - ${file(./resources/rds/resources.yml)}
+  - ${file(./resources/lambdas/resources.yml)}
+
+functions: ${file(./resources/lambdas/functions.yml)}
+custom:
+  scripts:
+    hooks:
+      'aws:deploy:finalize:cleanup': ${file(./scripts/post-deployment-exec.js)}
+  appsync-simulator:
+    location: ".webpack/service"
+    rds:
+      dbName: ${file(./scripts/set-db-environment.js):env.DB_NAME}
+      dbHost: ${file(./scripts/set-db-environment.js):env.DB_HOST}
+      dbDialect: ${file(./scripts/set-db-environment.js):env.DB_DIALECT}
+      dbUsername: ${file(./scripts/set-db-environment.js):env.DB_USERNAME}
+      dbPassword: ${file(./scripts/set-db-environment.js):env.DB_PASSWORD}
+      dbPort: ${file(./scripts/set-db-environment.js):env.DB_PORT}
+  webpack:
+    includeModules:
+      forceInclude:
+        - sequelize-cli
+    excludeFiles: ./**/*.test.js
+  AURORA:
+    VPC_CIDR: 10
+    DB_NAME: ${env:RDS_PREFIX}_${env:STAGE}
+  appSync:
+    name: ${env:NAME}-${env:STAGE}
+    schema: schema.graphql
+    logConfig:
+      level: ALL
+      excludeVerboseContent: false
+    serviceRole: AuthenticatedAppSyncServiceRole
+    authenticationType: API_KEY
+    mappingTemplatesLocation: resolvers/
+    mappingTemplates:
+      - ${file(./resources/mapping-templates/queries.yml)}
+      - ${file(./resources/mapping-templates/mutations.yml)}
+    dataSources:
+      - ${file(./resources/lambdas/datasources.yml)}
+      - ${file(./resources/rds/datasources.yml)}

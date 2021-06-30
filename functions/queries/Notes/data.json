@@ -1,0 +1,26 @@
+{
+  "field": "notes",
+  "arguments": {},
+  "identity": {
+    "claims": {
+      "sub": "55c6369d-8954-4a6b-a547-a2a4cfd5012a",
+      "event_id": "e0addfb9-a28a-4211-9102-f7b347873987",
+      "token_use": "access",
+      "scope": "aws.cognito.signin.user.admin",
+      "auth_time": 1599627072,
+      "iss": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_hOJM",
+      "exp": 1599630672,
+      "iat": 1599627072,
+      "jti": "a49c0e91-31e1-4180-913c-ba3a6f412145",
+      "client_id": "65rkr7ut8jssg4an5ippee0j62",
+      "username": "mac@wednesday.is"
+    },
+    "defaultAuthStrategy": "ALLOW",
+    "groups": null,
+    "issuer": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_hOwSgB5JM",
+    "sourceIp": ["219.91.249.148", " 130.176.20.96"],
+    "sub": "55c6369d-8954-4a6b-a547-a2a4cfd5012a",
+    "username": "mac@wednesday.is",
+    "email": "mac@wednesday.is"
+  }
+}
