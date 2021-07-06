@@ -6,6 +6,12 @@
 
 This is a boilerplate AppSync-aurora project, that is deployed using the serverless framework with out of the box support for automated creation of a Serverless database cluster, lambdas, vpcs, security groups, nat gateways, etc. 
 
+## Local setup
+
+Run the following command to setup the local database and run migrations
+```
+./scripts/setup-local.sh
+```
 
 This project exposes the following queries and mutations
 ## Queries
