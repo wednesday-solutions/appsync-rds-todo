@@ -15,7 +15,3 @@ Resources:
       Tags:
         - Key: 'Name'
           Value: 'ServerlessSecurityGroup'
-Outputs:
-  ServerlessSecurityGroupId:
-    Description: The Id of the ServerlessSecurityGroup
-    Value: !Ref ServerlessSecurityGroup

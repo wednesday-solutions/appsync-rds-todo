@@ -37,3 +37,24 @@ Resources:
         Ref: RouteTablePublic
       SubnetId:
         Ref: ServerlessSubnetC
+  SubnetRouteTableAssociationLambdaPublicA:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: ServerlessSubnetA
+      RouteTableId:
+        Ref: RouteTablePublic
+  SubnetRouteTableAssociationLambdaPublicB:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: ServerlessSubnetB
+      RouteTableId:
+        Ref: RouteTablePublic
+  SubnetRouteTableAssociationLambdaPublicC:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: ServerlessSubnetC
+      RouteTableId:
+        Ref: RouteTablePublic

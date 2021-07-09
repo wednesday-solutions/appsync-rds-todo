@@ -33,9 +33,6 @@ async function migrate(currentFileName, queryInterface) {
 }
 
 module.exports = {
-  up: function () {
-    return Promise.resolve(true);
-  },
   migrate,
   getVersion
 };

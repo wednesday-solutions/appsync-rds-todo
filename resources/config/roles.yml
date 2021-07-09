@@ -1,13 +1,64 @@
 Resources:
-
-  lambdaInvokePolicy:
-    Type: AWS::IAM::ManagedPolicy
+  AppSyncRDSServiceRole:
+    Type: "AWS::IAM::Role"
     Properties:
-      Description: Managed policy to provide access to invoke lambda
-      PolicyDocument:
-        Version: '2012-10-17'
+      RoleName: "lambda_appsync_rds_${self:service.name}_${self:provider.stage}"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
         Statement:
-          - Effect: 'Allow'
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "appsync.amazonaws.com"
             Action:
-              - 'lambda:InvokeFunction'
-            Resource: 'arn:aws:lambda:${env:REGION}:${env:ACCOUNT_ID}:function:*'
+              - "sts:AssumeRole"
+      Policies:
+        - PolicyName: "lambda_appsync_rds_${self:service.name}_${self:provider.stage}-Policy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: 'Allow'
+                Action:
+                  - 'rds-data:DeleteItems'
+                  - 'rds-data:ExecuteSql'
+                  - 'rds-data:ExecuteStatement'
+                  - 'rds-data:GetItems'
+                  - 'rds-data:InsertItems'
+                  - 'rds-data:UpdateItems'
+                Resource:
+                  - 'arn:aws:rds:${env:REGION}:${env:ACCOUNT_ID}:cluster:*'
+                  - 'arn:aws:rds:${env:REGION}:${env:ACCOUNT_ID}:cluster:*:*'
+              - Effect: 'Allow'
+                Action:
+                  - 'secretsmanager:GetSecretValue'
+                Resource:
+                  - 'arn:aws:secretsmanager:*:*:secret:RDSInstanceSecret*'
+  LambdaServiceRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "lambda_${self:service.name}_${self:provider.stage}"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "appsync.amazonaws.com"
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Policies:
+        - PolicyName: "lambda_${self:service.name}_${self:provider.stage}-Policy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "lambda:*"
+                  - "logs:*"
+                  - "dbqms:*"
+                  - "rds-data:*"
+                  - "secretsmanager:*"
+                  - "ec2:*"
+                Resource:
+                  - "*"

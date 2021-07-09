@@ -1,7 +1,13 @@
 #set( $update = "" )
 #set( $equals = "=" )
+## 1
 #foreach( $entry in $ctx.args.input.keySet() )
+   ## 2
    #set( $cur = $ctx.args.input[$entry] )
+   #set( $regex = "([a-z])([A-Z]+)")
+   #set( $replacement = "$1_$2")
+   #set( $toSnake = $entry.replaceAll($regex, $replacement).toLowerCase() )
+   ## 3
    #if( $util.isBoolean($cur) )
        #if( $cur )
          #set ( $cur = "1" )
@@ -9,10 +15,11 @@
          #set ( $cur = "0" )
        #end
    #end
+   ## 4
    #if ( $util.isNullOrEmpty($update) )
-      #set($update = "$entry$equals'$cur'" )
+      #set($update = "$toSnake$equals'$cur'" )
    #else
-      #set($update = "$update,$entry$equals'$cur'" )
+      #set($update = "$update,$toSnake$equals'$cur'" )
    #end
 #end
 {
