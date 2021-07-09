@@ -1,5 +1,4 @@
 Resources:
-
   RDSCluster:
     Type: AWS::RDS::DBCluster
     DependsOn:
@@ -11,7 +10,8 @@ Resources:
       DBSubnetGroupName:
         Ref: ServerlessSubnetGroup
       Engine: aurora-postgresql
-      EngineVersion: "10.7"
+      EnableHttpEndpoint: true
+      EngineVersion: '10.7'
       EngineMode: serverless
       ScalingConfiguration:
         AutoPause: true
@@ -20,15 +20,6 @@ Resources:
         SecondsUntilAutoPause: 300
       DatabaseName: ${self:custom.AURORA.DB_NAME}
       BackupRetentionPeriod: 3
-      DBClusterParameterGroupName: "default.aurora-postgresql10"
+      DBClusterParameterGroupName: 'default.aurora-postgresql10'
       VpcSecurityGroupIds:
-        - !Ref "ServerlessSecurityGroup"
-Outputs:
-  RDSHost:
-    Description: Host of the AppSync-RDS-todo RDS instance
-    Value:
-      Fn::GetAtt: [RDSCluster, Endpoint.Address]
-  RDSPort:
-    Description: Port of the AppSync-RDS-todo RDS instance
-    Value:
-      Fn::GetAtt: [RDSCluster, Endpoint.Port]
+        - !Ref 'ServerlessSecurityGroup'

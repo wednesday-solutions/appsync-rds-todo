@@ -16,36 +16,43 @@ provider:
   region: ${env:REGION}
   versionFunctions: false
   environment:
-    DB_DIALECT: ${file(./scripts/set-db-environment.js):env.DB_DIALECT}
-    DB_NAME: ${file(./scripts/set-db-environment.js):env.DB_NAME}
-    DB_HOST: ${file(./scripts/set-db-environment.js):env.DB_HOST}
-    DB_USERNAME: ${file(./scripts/set-db-environment.js):env.DB_USERNAME}
-    DB_PASSWORD: ${file(./scripts/set-db-environment.js):env.DB_PASSWORD}
-    DB_PORT: ${file(./scripts/set-db-environment.js):env.DB_PORT}
+    DB_HOST: ${file(./scripts/get-host.js)}
+    DB_NAME: ${env:RDS_PREFIX}_${env:STAGE}
+    DB_USERNAME: ${env:RDS_USERNAME}_${env:STAGE}
+  vpc:
+    securityGroupIds:
+      - { Fn::GetAtt: [ServerlessSecurityGroup, GroupId] }
+    subnetIds:
+      - Ref: ServerlessSubnetA
+      - Ref: ServerlessSubnetB
+      - Ref: ServerlessSubnetC
 resources:
   - ${file(./resources/config/roles.yml)}
   - ${file(./resources/config/vpc.yml)}
   - ${file(./resources/config/subnet.yml)}
   - ${file(./resources/config/internet-gateway.yml)}
+  - ${file(./resources/config/nat-gateway.yml)}
+  - ${file(./resources/config/elastic-ip.yml)}
+  - ${file(./resources/config/route-private.yml)}
   - ${file(./resources/config/route-public.yml)}
   - ${file(./resources/config/security-groups.yml)}
-  - ${file(./resources/rds/resources.yml)}
-  - ${file(./resources/lambdas/resources.yml)}
+  - ${file(./resources/config/secrets.yml)}
+  - ${file(./resources/config/db-cluster.yml)}
 
 functions: ${file(./resources/lambdas/functions.yml)}
 custom:
   scripts:
     hooks:
-      'aws:deploy:finalize:cleanup': ${file(./scripts/post-deployment-exec.js)}
+      'aws:deploy:finalize:cleanup': ${file(./scripts/post-deployment.js)}
   appsync-simulator:
-    location: ".webpack/service"
+    location: '.webpack/service'
     rds:
-      dbName: ${file(./scripts/set-db-environment.js):env.DB_NAME}
-      dbHost: ${file(./scripts/set-db-environment.js):env.DB_HOST}
-      dbDialect: ${file(./scripts/set-db-environment.js):env.DB_DIALECT}
-      dbUsername: ${file(./scripts/set-db-environment.js):env.DB_USERNAME}
-      dbPassword: ${file(./scripts/set-db-environment.js):env.DB_PASSWORD}
-      dbPort: ${file(./scripts/set-db-environment.js):env.DB_PORT}
+      dbName: ${env:RDS_PREFIX}_${env:STAGE}
+      dbHost: ${file(./scripts/get-host.js)}
+      dbUsername: ${env:RDS_USERNAME}_${env:STAGE}
+      dbDialect: ${env:DB_DIALECT}
+      dbPassword: ${env:DB_PASSWORD}
+      dbPort: ${env:DB_PORT}
   webpack:
     includeModules:
       forceInclude:

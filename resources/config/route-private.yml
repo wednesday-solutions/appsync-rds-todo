@@ -1,0 +1,36 @@
+Resources:
+  DefaultPrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: ServerlessVPC
+  DefaultPrivateRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: DefaultPrivateRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: ServerlessNatGateway
+  SubnetRouteTableAssociationLambdaPrivateA:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: ServerlessPrivateSubnetA
+      RouteTableId:
+        Ref: DefaultPrivateRouteTable
+  SubnetRouteTableAssociationLambdaPrivateB:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: ServerlessPrivateSubnetB
+      RouteTableId:
+        Ref: DefaultPrivateRouteTable      
+  SubnetRouteTableAssociationLambdaPrivateC:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: ServerlessPrivateSubnetC
+      RouteTableId:
+        Ref: DefaultPrivateRouteTable
+  

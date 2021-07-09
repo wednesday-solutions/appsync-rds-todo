@@ -1,17 +1,17 @@
 - type: Query
   field: notes
   request: "queries/query.req.vtl"
-  response: "response.vtl"
+  response: "queries/response.vtl"
   dataSource: Lambda_notes
 
 - type: Query
   field: lists
   request: "queries/query.req.vtl"
-  response: "response.vtl"
+  response: "queries/response.vtl"
   dataSource: Lambda_lists
 
 - type: Query
   field: users
   request: "queries/query.req.vtl"
-  response: "response.vtl"
+  response: "queries/response.vtl"
   dataSource: Lambda_users

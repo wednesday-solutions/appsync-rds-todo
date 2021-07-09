@@ -50,8 +50,8 @@ You can find the complete postman collection here: [Collection](postman/collecti
 ## Highlights 
 - Automated creation of resources
 
-    This project handles creation of all resources expect the secret manager, which you will need to create yourself and add the ARN to the environment.
-    I've used an ApiKey for authentication for this project but to know more about how to integrate AppSync with cognito take a look at the following implementaions
+    This project handles creation of all resources.
+    It uses an ApiKey for authentication for this project but to know more about how to integrate AppSync with cognito take a look at the following implementaions
     - [Federated and passwordless login](https://github.com/wednesday-solutions/serverless/tree/master/aws/cognito/federated-plus-passwordless-login)
     - [Federated Sign in](https://github.com/wednesday-solutions/serverless/tree/master/aws/cognito/federated-signin)
     - [Passwordless login](https://github.com/wednesday-solutions/serverless/tree/master/aws/cognito/passwordless-login)
@@ -60,14 +60,17 @@ You can find the complete postman collection here: [Collection](postman/collecti
     Creation of the following resources is automated
     - [Serverless Aurora cluster](resources/rds/resources.yml)
     - [Subnets](resources/config/subnet.yml)
-    - [Route Tables](resources/config/route-public.yml)
-    - [Security Groups]((resources/config/security-groups.yml))
+    - [Public Route Table](resources/config/route-public.yml)
+    - [Private Route Table](resources/config/route-private.yml)
+    - [Security Groups](resources/config/security-groups.yml)
     - [VPC](resources/config/vpc.yml)
-    - [NAT Gateway](resources/config/vpc.yml)
+    - [Elastic IP](resources/config/elastic-ip.yml)
+    - [Secret](resources/config/secrets.yml)
+    - [NAT Gateway](resources/config/nat-gateway.yml)
     - [Internet Gateway](resources/config/internet-gateway.yml)
     - [IAM Roles](resources/config/roles.yml)
-    - [Lambdas](resources/rds/resources.yml)
-    - [Lambdas as datasources](resources/lambas/datasources.yml)
+    - [Lambdas](resources/lambdas/functions.yml)
+    - [Lambdas as datasources](resources/lambdas/datasources.yml)
     - [RDS as a datasource](resources/rds/datasources.yml)
 - Support for running database migrations in the CD pipeline. 
     If you've used a serverless cluster before you know how problematic this is. Take a look at the following files to get a better idea about how we did it
@@ -77,7 +80,7 @@ You can find the complete postman collection here: [Collection](postman/collecti
 - All queries support a sequelizedWhere, which allows a highly-configurable queries
 - All mutations are resolved directly off of the database
     This project has out of the support for a camelCased GraphQL interface, whereas the database layer has snake_case table and column names. So how do we resolve mutations directly off of the database?
-    - [resolvers/mutations/createNote.request.vtl](resolvers/mutations/createNote.request.vtl)
+    - [resolvers/mutations/createNote.req.vtl](resolvers/mutations/createNote.req.vtl)
     - [resolvers/mutations/response.vtl](resolvers/mutations/response.vtl)
 - Max depth for GraphQL queries is restricted to 4
 - Support for paginated queries
@@ -151,6 +154,8 @@ Take a look at the following lambda, you just need to change the model that you'
 
     - Create
 
+      Similar to the one here [createNote.req.vtl](resolvers/mutations/createNote.req.vtl)
+
         ```
             #set( $cols = [] )
             #set( $vals = [] )
@@ -186,6 +191,8 @@ Take a look at the following lambda, you just need to change the model that you'
 
     - Update
 
+      Similar to the one here [updateNote.req.vtl](resolvers/mutations/updateNote.req.vtl)
+
         ```
             #set( $update = "" )
             #set( $equals = "=" )
@@ -211,6 +218,8 @@ Take a look at the following lambda, you just need to change the model that you'
         ```
 
     - Delete
+    
+      Similar to the one here [deleteNote.req.vtl](resolvers/mutations/deleteNote.req.vtl)
 
         ```
             {

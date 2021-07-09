@@ -1,41 +1,12 @@
 notes:
   handler: functions/queries/Notes/index.handler
-  role: LambdaServiceRole
-  vpc:
-    securityGroupIds:
-      - !Ref ServerlessSecurityGroup
-    subnetIds:
-      - Ref: ServerlessPrivateSubnetA
-      - Ref: ServerlessPrivateSubnetB
-      - Ref: ServerlessPrivateSubnetC        
+  role: LambdaServiceRole       
 users:
   handler: functions/queries/Users/index.handler
-  role: LambdaServiceRole
-  vpc:
-    securityGroupIds:
-      - !Ref ServerlessSecurityGroup
-    subnetIds:
-      - Ref: ServerlessPrivateSubnetA
-      - Ref: ServerlessPrivateSubnetB
-      - Ref: ServerlessPrivateSubnetC        
+  role: LambdaServiceRole   
 lists:
   handler: functions/queries/Lists/index.handler
   role: LambdaServiceRole
-  vpc:
-    securityGroupIds:
-      - !Ref ServerlessSecurityGroup
-    subnetIds:
-      - Ref: ServerlessPrivateSubnetA
-      - Ref: ServerlessPrivateSubnetB
-      - Ref: ServerlessPrivateSubnetC
 databaseMigrate:
   handler: functions/database/migrate/index.handler
   role: LambdaServiceRole
-  webpack: false
-  vpc:
-    securityGroupIds:
-      - !Ref ServerlessSecurityGroup
-    subnetIds:
-      - Ref: ServerlessPrivateSubnetA
-      - Ref: ServerlessPrivateSubnetB
-      - Ref: ServerlessPrivateSubnetC        

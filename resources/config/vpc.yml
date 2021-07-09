@@ -1,8 +1,4 @@
 Resources:
-  ElasticIpLambda:
-     Type: AWS::EC2::EIP
-     Properties:
-       Domain: vpc
   ServerlessVPC:
     Type: AWS::EC2::VPC
     Properties:
@@ -20,12 +16,3 @@ Resources:
         Ref: ServerlessVPC
       InternetGatewayId:
         Ref: ServerlessInternetGateway
-  NatGatewayLambda:
-    Type: AWS::EC2::NatGateway
-    Properties:
-      AllocationId:
-        Fn::GetAtt:
-          - ElasticIpLambda
-          - AllocationId
-      SubnetId:
-        Ref: ServerlessSubnetA

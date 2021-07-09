@@ -23,7 +23,6 @@ jobs:
         uses: SpicyPizza/create-envfile@v1
         with:
           envkey_DB_PASSWORD: ${{ secrets.DB_PASSWORD_DEV }}
-          envkey_AWS_SECRET_ARN: ${{ secrets.AWS_SECRET_ARN_DEV }}
           envkey_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           file_name: .env.${{steps.vars.outputs.stage}}.local
       - name: serverless deploy --stage=${{steps.vars.outputs.stage}}
