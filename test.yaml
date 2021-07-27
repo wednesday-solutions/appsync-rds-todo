@@ -1,0 +1,15 @@
+config:
+  target: "{{ $processEnvironment.APPSYNC_API_URL }}"
+  phases:
+    - duration: 120
+      arrivalRate: 10
+  defaults:
+    headers:
+      x-api-key: "{{ $processEnvironment.APPSYNC_API_KEY }}"
+      Content-Type: 'application/graphql'
+scenarios:
+  - flow:
+      - post:
+          url: '/'
+          json:
+            query: 'query ListEvents { listEvents { items { id } } }'
