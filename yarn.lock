@@ -3890,9 +3890,10 @@ amazon-cognito-identity-js@^3.2.7:
     crypto-js "^3.1.9-1"
     js-cookie "^2.1.4"
 
-"amplify-appsync-simulator@git+https://github.com/alichherawalla/amplify-appsync-simulator.git":
-  version "1.27.1"
-  resolved "git+https://github.com/alichherawalla/amplify-appsync-simulator.git#0ca885f7016526553c7c761240d8e4fa90a1bbd8"
+amplify-appsync-simulator@^1.27.4:
+  version "1.27.4"
+  resolved "https://registry.yarnpkg.com/amplify-appsync-simulator/-/amplify-appsync-simulator-1.27.4.tgz#2163eefda771fc4d58a95e14ef9b1dc14f995566"
+  integrity sha512-Prj2odFYORNFScmHiJhXrF34krr9xMuxpfJ7PWpDucKQoT04hqBnOlQ+ys3PTI5n5SWzFLojXP/cQST9ASkNzQ==
   dependencies:
     amplify-velocity-template "1.4.5"
     aws-sdk "^2.919.0"
@@ -14512,11 +14513,12 @@ serverless-appsync-plugin@^1.8.0:
     moment "^2.29.1"
     ramda "^0.25.0"
 
-"serverless-appsync-simulator@git+https://github.com/alichherawalla/serverless-appsync-simulator.git#rds":
-  version "0.17.0"
-  resolved "git+https://github.com/alichherawalla/serverless-appsync-simulator.git#afe2850e84ef4a00f945b47f7297dd0c3ac938d1"
+serverless-appsync-simulator@^0.18.0:
+  version "0.18.0"
+  resolved "https://registry.yarnpkg.com/serverless-appsync-simulator/-/serverless-appsync-simulator-0.18.0.tgz#944b1d771d8fce1b8491d1cfc5f8dba375aadae9"
+  integrity sha512-iTyQ52BNJ7/INYSr/XYbhGMsXeUzE0w1FnmxalufORdBZvuPkbBU/N/V3uGUwlFAf9gv3G+uxepNMNvtA8hGQw==
   dependencies:
-    amplify-appsync-simulator "git+https://github.com/alichherawalla/amplify-appsync-simulator.git"
+    amplify-appsync-simulator "^1.27.4"
     amplify-nodejs-function-runtime-provider "^1.1.6"
     aws-sdk "^2.792.0"
     axios "^0.21.0"
@@ -14531,7 +14533,6 @@ serverless-appsync-plugin@^1.8.0:
     merge-graphql-schemas "^1.5.8"
     mysql2 "^2.2.5"
     pg "^8.6.0"
-    sequelize "^6.6.4"
 
 serverless-dependson-plugin@^1.1.2:
   version "1.1.2"

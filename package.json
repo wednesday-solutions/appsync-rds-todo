@@ -70,7 +70,7 @@
     "sequelize-mock": "^0.10.2",
     "serverless": "^2.51.2",
     "serverless-appsync-plugin": "^1.8.0",
-    "serverless-appsync-simulator": "git+https://github.com/alichherawalla/serverless-appsync-simulator.git#rds",
+    "serverless-appsync-simulator": "^0.18.0",
     "serverless-dependson-plugin": "^1.1.2",
     "serverless-dotenv-plugin": "^3.3.0",
     "serverless-offline": "^6.8.0",
